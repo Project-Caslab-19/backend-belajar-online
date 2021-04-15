@@ -22,3 +22,15 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 ## License
 
 The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Dependencies
+
+1. Lumen-generator https://github.com/flipboxstudio/lumen-generator
+
+## How To Run
+
+1. Clone repository
+2. copy file .env.exampple dan rename menjadi .env
+3. Buka project di terminal dan ketik command "composer install"
+4. ketik command "php artisan key:generate"
+5. ketik command "php artisan serve" atau "php -S localhost:8000 -t public" untuk run server
