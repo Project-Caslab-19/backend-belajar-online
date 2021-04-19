@@ -26,6 +26,7 @@ The Lumen framework is open-sourced software licensed under the [MIT license](ht
 ## Dependencies
 
 1. Lumen-generator https://github.com/flipboxstudio/lumen-generator
+2. JWT-Auth https://jwt-auth.readthedocs.io/
 
 ## How To Run
 
