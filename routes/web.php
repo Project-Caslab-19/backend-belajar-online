@@ -16,4 +16,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/controller', 'Controller@index');
+$router->group(['prefix' => 'api'], function() use ($router){
+    $router->post('login', 'AuthController@login');
+    $router->post('logout', 'AuthController@logout');
+
+    $router->group(['middleware' => 'auth'], function() use ($router) {
+        $router->get('/controller', 'Controller@index');
+    });
+});
