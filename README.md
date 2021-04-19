@@ -34,4 +34,5 @@ The Lumen framework is open-sourced software licensed under the [MIT license](ht
 2. copy file .env.exampple dan rename menjadi .env
 3. Buka project di terminal dan ketik command "composer install"
 4. ketik command "php artisan key:generate"
-5. ketik command "php artisan serve" atau "php -S localhost:8000 -t public" untuk run server
+5. ketik command php artisan jwt:secret
+6. ketik command "php artisan serve" atau "php -S localhost:8000 -t public" untuk run server
