@@ -40,8 +40,9 @@ $router->group(['prefix' => 'api'], function() use ($router){
         //profile
         $router->group(['prefix' => 'profile'], function() use ($router){
             $router->get('/', ['as' => 'profile', 'uses' => 'ProfileController@get_user_profile']);
-            $router->get('/get_avatar/{id}', ['as' => 'get_avatar', 'uses' => 'ProfileController@getAvatar']);
+            $router->get('/get_avatar/{id}', ['as' => 'get_avatar', 'uses' => 'ProfileController@get_avatar']);
             $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'ProfileController@update_profile']);
+            $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'ProfileController@update_account']);
         });
 
         $router->get('/controller', 'Controller@index');

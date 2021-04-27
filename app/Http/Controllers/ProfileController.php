@@ -2,18 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\Helpers\ResponseHelper;
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
+    public function get_avatar($id)
+    {
+        try{
+            $user = User::where('id', $id)->firstOrFail();
+        }catch(\Exception $ex)
+        {
+            return ResponseHelper::responseError($ex, 404);
+        }
+        
+        $path = storage_path('uploads/students/photos/') . $user->photo;
+    
+        if(!File::exists($path)) 
+            $path = storage_path('uploads/students/photos/') . 'default.png';
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        return (new Response($file, 200))->header('Content-Type', $type);
+    }
+
     public function get_user_profile()
     {
         try{
@@ -86,24 +107,95 @@ class ProfileController extends Controller
         }
     }
 
-    public function getAvatar($id)
+    public function update_account(Request $request, $id)
     {
-        try{
-            $user = User::where('id', $id)->firstOrFail();
-        }catch(\Exception $ex)
+        $email = $request->email;
+        $password = $request->password;
+        $re_password = $request->re_password;
+
+        if(!empty($email))
         {
-            return ResponseHelper::responseError($ex, 404);
+            return $this->updateEmail($email, $id);
         }
-        
-        $path = storage_path('uploads/students/photos/') . $user->photo;
-    
-        if(!File::exists($path)) 
-            $path = storage_path('uploads/students/photos/') . 'default.png';
 
-        $file = File::get($path);
-        $type = File::mimeType($path);
-
-        return (new Response($file, 200))->header('Content-Type', $type);
+        if(!empty($password))
+        {
+            return $this->updatePassword($password, $re_password, $id);
+        }
     }
 
+    protected function updateEmail($email, $id)
+    {
+        $validator = Validator::make(
+    [
+            'email' => $email
+        ], 
+        [
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($id),
+            ]
+        ], [], 
+        [
+            'email' => 'E-Mail'
+        ]
+        );
+
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return ResponseHelper::responseValidation($errors);
+        }
+        else
+        {
+            try{
+                $model = User::findOrFail($id);
+                $model->email = $email;
+                $model->save();
+
+                return ResponseHelper::responseSuccess('Congratulations! your email has been successfully changed.');
+            }catch(\Exception $ex){
+                return ResponseHelper::responseError($ex, 500);
+            }
+
+        }
+    }
+
+    protected function updatePassword($password, $re_password, $id)
+    {
+        $validator = Validator::make(
+            [
+                'password' => $password,
+                're_password' => $re_password
+            ], 
+            [
+                'password' => 'min:8|required|same:re_password',
+                're_password' => 'min:8|required'
+            ], [], 
+            [
+                'password' => 'Password',
+                're_password' => 'Konfirmasi Password'
+            ]
+        );
+    
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            return ResponseHelper::responseValidation($errors);
+        }
+        else
+        {
+            try{
+                $model = User::findOrFail($id);
+                $model->password = Hash::make($password);
+                $model->save();
+
+                return ResponseHelper::responseSuccess('Congratulations! your password has been successfully changed.');
+            }catch(\Exception $ex){
+                return ResponseHelper::responseError($ex, 500);
+            }
+
+        }
+    }
 }

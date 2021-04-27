@@ -6,7 +6,7 @@
         {
             return response()->json([
                 'error' => true,
-                'message' => (!is_array($errors)) ? $errors : $errors->all(),
+                'message' => (!is_object($errors)) ? $errors : $errors->all(),
             ], 422);
         }
 
