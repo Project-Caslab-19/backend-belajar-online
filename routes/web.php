@@ -31,6 +31,8 @@ $router->group(['prefix' => 'api'], function() use ($router){
 
         //category
         $router->group(['prefix' => 'classroom'], function() use ($router) {
+            $router->post('/enroll', ['as' => 'enroll', 'uses' => 'ClassroomController@enroll_classroom']);
+
             $router->get('/', ['as' => 'classroom', 'uses' => 'ClassroomController@get_all_classroom']);
             $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'ClassroomController@get_detail_classroom']);
         });
