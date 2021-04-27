@@ -37,6 +37,13 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'ClassroomController@get_detail_classroom']);
         });
 
+        //profile
+        $router->group(['prefix' => 'profile'], function() use ($router){
+            $router->get('/', ['as' => 'profile', 'uses' => 'ProfileController@get_user_profile']);
+            $router->get('/get_avatar/{id}', ['as' => 'get_avatar', 'uses' => 'ProfileController@getAvatar']);
+            $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'ProfileController@update_profile']);
+        });
+
         $router->get('/controller', 'Controller@index');
     });
 });

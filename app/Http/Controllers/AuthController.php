@@ -9,18 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\ResponseHelper;
 
 class AuthController extends Controller
 {
-    protected function responseValidator($validator)
-    {
-        $errors = $validator->errors();
-        return response()->json([
-            'error' => true,
-            'message' => $errors->all(),
-        ], 422);
-    }
-
     protected function responseWithToken($token)
     {
         return response()->json([
@@ -52,7 +44,8 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return $this->responseValidator($validator);
+            $errors = $validator->errors();
+            return ResponseHelper::responseValidation($errors);
         }
 
         $login_type = filter_var($login, FILTER_VALIDATE_EMAIL ) ? 'email' : 'username';
@@ -64,10 +57,7 @@ class AuthController extends Controller
         $credentials = request([$login_type, 'password']);
 
         if (!$token = Auth::attempt($credentials)) {
-            return response()->json([
-                'error' => true,
-                'message' => 'Unauthorized'
-            ], 401);
+            return ResponseHelper::responseError('Unauthorized', 401);
         }
 
         return $this->responseWithToken($token);
@@ -108,7 +98,8 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return $this->responseValidator($validator);
+            $errors = $validator->errors();
+            return ResponseHelper::responseValidation($errors);
         }
 
         try{
@@ -120,21 +111,15 @@ class AuthController extends Controller
             $model->type = $type;
             $model->save();
 
-            return response()->json([
-                'error' => false,
-                'message' => 'Congratulations! you have successfully registered',
-            ]);
+            return ResponseHelper::responseSuccess('Congratulations! you have successfully registered');
         }catch(\Exception $ex){
-            return response()->json([
-                'error' => true,
-                'message' => $ex
-            ]);
+            return ResponseHelper::responseError($ex, 500);
         }
     }
 
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Successfully logged out'], 200);
+        return ResponseHelper::responseSuccess('Congratulations! you successfully logged out');
     }
 }

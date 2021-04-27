@@ -7,29 +7,27 @@ use App\Models\Classroom;
 use App\Models\ClassMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\ResponseHelper;
+use Illuminate\Auth\Access\Response;
 
 class ClassroomController extends Controller
 {
     public function get_all_classroom(){
-        return response()->json([
-            'error' => false,
-            'data' => Classroom::with('category')->get()
-        ], 200);
+        try{
+            $data = Classroom::with('category')->get();
+            return ResponseHelper::responseSuccessWithData($data);
+        }catch(\Exception $ex){
+            return ResponseHelper::responseError($ex, 500);
+        }
     }   
 
     public function get_detail_classroom($id)
     {
         try{
             $classroom = Classroom::with('topics', 'category', 'members', 'members.user','user')->findOrFail($id);
-            return response()->json([
-                'error' => false,
-                'data' => $classroom
-            ], 200);
+            return ResponseHelper::responseSuccessWithData($classroom);
         }catch(\Exception $ex){
-            return response()->json([
-                'error' => false,
-                'message' => 'Data not found!'
-            ], 400);
+            return ResponseHelper::responseError('Data not found!', 404);
         }
     }
 
@@ -50,27 +48,18 @@ class ClassroomController extends Controller
         if($validator->fails())
         {
             $errors = $validator->errors();
-            return response()->json([
-                'error' => true,
-                'message' => $errors->all()
-            ], 422);
+            return ResponseHelper::responseValidation($errors);
         }
 
         $cek = ClassMember::where('user_id', $user_id)->where('class_id', $class_id)->first();
         if(!empty($cek))
         {
-            return response()->json([
-                'error' => true,
-                'message' => 'Students are already enrolled in this class!'
-            ], 422);
+            return ResponseHelper::responseValidation('Students are already enrolled in this class!');
         }
 
         $cek_token = Classroom::where('id', $class_id)->where('token', $token)->first();
         if(empty($cek_token)){
-            return response()->json([
-                'error' => true,
-                'message' => 'The class token you entered is incorrect!'
-            ], 422);
+            return ResponseHelper::responseValidation('The class token you entered is incorrect!');
         }   
 
         try{
@@ -78,16 +67,10 @@ class ClassroomController extends Controller
             $model->class_id = $class_id;
             $model->user_id = $user_id;
             $model->save();
-    
-            return response()->json([
-                'error' => false,
-                'message' => 'Congratulations you have successfully enrolled in this class!'
-            ], 200);
+                
+            return ResponseHelper::responseSuccess('Congratulations you have successfully enrolled in this class!');
         }catch(\Exception $ex){
-            return response()->json([
-                'error' => true,
-                'message' => $ex
-            ], 500);
+            return ResponseHelper::responseError($ex, 500);
         }
     }
 }

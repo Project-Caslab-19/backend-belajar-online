@@ -4,29 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Helpers\ResponseHelper;
 
 class CategoryController extends Controller
 {
     public function get_all_categories()
     {
-        return response()->json([
-            'error' => false,
-            'data' => Category::all()
-        ], 200);
+        try{
+            $data = Category::all();
+            return ResponseHelper::responseSuccessWithData($data);
+        }catch(\Exception $ex){
+            return ResponseHelper::responseError($ex, 500);
+        }
+        
     }
 
     public function get_detail_category($id){
         try{
             $category = Category::with('classroom')->where('id', $id)->firstOrFail();
-            return response()->json([
-                'error' => false,
-                'data' => $category
-            ], 200);
+            return ResponseHelper::responseSuccessWithData($category);
         }catch(\Exception $ex){
-            return response()->json([
-                'error' => true,
-                'message' => 'data not found!'
-            ], 404);
+            return ResponseHelper::responseError('Data not found!', 404);
         }
     }
 }

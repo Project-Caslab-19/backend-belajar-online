@@ -16,6 +16,7 @@ class CreateClassroom extends Migration
         Schema::create('classroom', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('photo')->nullable();
             $table->tinyInteger('user_id');
             $table->tinyInteger('category_id');
             $table->text('description')->nullable();
