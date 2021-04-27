@@ -17,7 +17,7 @@ class CreateTableLearnings extends Migration
             $table->id();
             $table->tinyInteger('topics_id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('video');
             $table->timestamps();
             $table->softDeletes();

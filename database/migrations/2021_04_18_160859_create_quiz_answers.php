@@ -17,7 +17,7 @@ class CreateQuizAnswers extends Migration
             $table->id();
             $table->tinyInteger('user_id');
             $table->tinyInteger('question_id');
-            $table->tinyInteger('answer_id');
+            $table->tinyInteger('answer_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
