@@ -17,8 +17,9 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function() use ($router){
-    $router->post('login', 'AuthController@login');
-    $router->post('logout', 'AuthController@logout');
+    $router->post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
+    $router->post('register', ['as' => 'register', 'uses' => 'AuthController@register']);
+    $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
 
     $router->group(['middleware' => 'auth'], function() use ($router) {
         $router->get('/controller', 'Controller@index');
