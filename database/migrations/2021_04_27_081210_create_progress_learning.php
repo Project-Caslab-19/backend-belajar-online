@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableLearnings extends Migration
+class CreateProgressLearning extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateTableLearnings extends Migration
      */
     public function up()
     {
-        Schema::create('learnings', function (Blueprint $table) {
+        Schema::create('progress_learning', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('topic_id');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('video');
+            $table->tinyInteger('learning_id');
+            $table->tinyInteger('user_id');
             $table->string('duration');
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +30,6 @@ class CreateTableLearnings extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('learnings');
+        Schema::dropIfExists('progress_learning');
     }
 }
