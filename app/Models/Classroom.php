@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Classroom extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];
     protected $table = 'classroom';
     
@@ -16,16 +19,16 @@ class Classroom extends Model
 
     public function category()
     {
-        return $this->hasOne(Category::class, 'category_id', 'id');
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
     
     public function members()
     {
-        return $this->hasMany(ClassMember::class, 'category_id', 'id');
+        return $this->hasMany(ClassMember::class, 'class_id', 'id');
     }
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

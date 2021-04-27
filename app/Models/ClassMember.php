@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClassMember extends Model
 {
+    use SoftDeletes;
+    
     protected $guarded = [];
     
     public function classroom()
     {
-        return $this->hasOne(Classroom::class, 'class_id', 'id');
+        return $this->hasOne(Classroom::class, 'id', 'class_id');
     }
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

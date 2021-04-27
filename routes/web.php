@@ -29,6 +29,12 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'CategoryController@get_detail_category']);
         });
 
+        //category
+        $router->group(['prefix' => 'classroom'], function() use ($router) {
+            $router->get('/', ['as' => 'classroom', 'uses' => 'ClassroomController@get_all_classroom']);
+            $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'ClassroomController@get_detail_classroom']);
+        });
+
         $router->get('/controller', 'Controller@index');
     });
 });
