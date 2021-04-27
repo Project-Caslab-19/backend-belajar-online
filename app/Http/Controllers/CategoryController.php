@@ -16,12 +16,12 @@ class CategoryController extends Controller
     }
 
     public function get_detail_category($id){
-        $category = Category::with('classroom')->where('id', $id)->firstOrFail();
-        return response()->json([
-            'error' => false,
-            'data' => $category
-        ], 200);
         try{
+            $category = Category::with('classroom')->where('id', $id)->firstOrFail();
+            return response()->json([
+                'error' => false,
+                'data' => $category
+            ], 200);
         }catch(\Exception $ex){
             return response()->json([
                 'error' => true,
