@@ -22,6 +22,13 @@ $router->group(['prefix' => 'api'], function() use ($router){
     $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
 
     $router->group(['middleware' => 'auth'], function() use ($router) {
+        
+        //category
+        $router->group(['prefix' => 'category'], function() use ($router) {
+            $router->get('/', ['as' => 'category', 'uses' => 'CategoryController@get_all_categories']);
+            $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'CategoryController@get_detail_category']);
+        });
+
         $router->get('/controller', 'Controller@index');
     });
 });
