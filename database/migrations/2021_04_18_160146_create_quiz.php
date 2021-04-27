@@ -15,7 +15,7 @@ class CreateQuiz extends Migration
     {
         Schema::create('quiz', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('topics_id');
+            $table->tinyInteger('topic_id');
             $table->string('name');
             $table->text('description');
             $table->timestamps();

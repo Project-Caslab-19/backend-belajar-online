@@ -16,8 +16,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable, HasFactory;
     use SoftDeletes;
 
-    protected $table = 'users';
-
     public function getJWTIdentifier()
     {
         return $this->getKey();

@@ -15,7 +15,7 @@ class CreateTableLearnings extends Migration
     {
         Schema::create('learnings', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('topics_id');
+            $table->tinyInteger('topic_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('video');
