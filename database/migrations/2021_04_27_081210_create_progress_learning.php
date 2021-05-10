@@ -15,7 +15,7 @@ class CreateProgressLearning extends Migration
     {
         Schema::create('progress_learning', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('learning_id');
+            $table->tinyInteger('topic_id');
             $table->tinyInteger('user_id');
             $table->string('duration');
             $table->timestamps();

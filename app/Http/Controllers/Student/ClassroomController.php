@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student;
 
 use Illuminate\Http\Request;
 use App\Models\Classroom;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ResponseHelper;
 use Illuminate\Auth\Access\Response;
+use App\Http\Controllers\Controller;
 
 class ClassroomController extends Controller
 {

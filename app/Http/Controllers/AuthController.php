@@ -31,7 +31,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $login = $request->login;
+        $login = $request->login; //usernamae / email 
+        $password = $request->password; //password
         
         $attrs = [
             'login' => 'E-Mail or Username',
@@ -54,9 +55,12 @@ class AuthController extends Controller
             $login_type => $login
         ]);
 
-        $credentials = request([$login_type, 'password']);
+        $token = Auth::attempt([
+            $login_type => $login,
+            'password' => $password,
+        ]);
 
-        if (!$token = Auth::attempt($credentials)) {
+        if (!$token) {
             return ResponseHelper::responseError('Unauthorized', 401);
         }
 

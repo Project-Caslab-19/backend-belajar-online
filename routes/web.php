@@ -17,32 +17,32 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function() use ($router){
-    $router->post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
-    $router->post('register', ['as' => 'register', 'uses' => 'AuthController@register']);
-    $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
+    $router->post('login', ['as' => 'login', 'uses' => 'AuthController@login']); //localhost:8000/api/login
+    $router->post('register', ['as' => 'register', 'uses' => 'AuthController@register']); //localhost:8000/api/register
+    $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']); //localhost:8000/api/logout
 
     $router->group(['middleware' => 'auth'], function() use ($router) {
         
         //category
         $router->group(['prefix' => 'category'], function() use ($router) {
-            $router->get('/', ['as' => 'category', 'uses' => 'CategoryController@get_all_categories']);
-            $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'CategoryController@get_detail_category']);
+            $router->get('/', ['as' => 'category', 'uses' => 'Student\CategoryController@get_all_categories']); // localhost:8000/api/category
+            $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'Student\CategoryController@get_detail_category']); // localhost:8000/api/category/{id}
         });
 
         //category
         $router->group(['prefix' => 'classroom'], function() use ($router) {
-            $router->post('/enroll', ['as' => 'enroll', 'uses' => 'ClassroomController@enroll_classroom']);
+            $router->post('/enroll', ['as' => 'enroll', 'uses' => 'Student\ClassroomController@enroll_classroom']); // localhost:8000/api/classroom/enroll
 
-            $router->get('/', ['as' => 'classroom', 'uses' => 'ClassroomController@get_all_classroom']);
-            $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'ClassroomController@get_detail_classroom']);
+            $router->get('/', ['as' => 'classroom', 'uses' => 'Student\ClassroomController@get_all_classroom']); // localhost:8000/api/classroom/
+            $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'Student\ClassroomController@get_detail_classroom']); // localhost:8000/api/classroom/{id}
         });
 
         //profile
         $router->group(['prefix' => 'profile'], function() use ($router){
-            $router->get('/', ['as' => 'profile', 'uses' => 'ProfileController@get_user_profile']);
-            $router->get('/get_avatar/{id}', ['as' => 'get_avatar', 'uses' => 'ProfileController@get_avatar']);
-            $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'ProfileController@update_profile']);
-            $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'ProfileController@update_account']);
+            $router->get('/', ['as' => 'profile', 'uses' => 'Student\ProfileController@get_user_profile']); // localhost:8000/api/profile
+            $router->get('/get_avatar/{id}', ['as' => 'get_avatar', 'uses' => 'Student\ProfileController@get_avatar']); // localhost:8000/api/profile/get_avatar/{id}
+            $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'Student\ProfileController@update_profile']); // localhost:8000/api/profile/update_profile/{id}
+            $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'Student\ProfileController@update_account']); // localhost:8000/api/profile/update_account/{id}
         });
 
         $router->get('/controller', 'Controller@index');

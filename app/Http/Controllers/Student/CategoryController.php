@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Helpers\ResponseHelper;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,6 @@ class CategoryController extends Controller
         }catch(\Exception $ex){
             return ResponseHelper::responseError($ex, 500);
         }
-        
     }
 
     public function get_detail_category($id){
