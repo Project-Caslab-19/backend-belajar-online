@@ -13,15 +13,15 @@ class Topic extends Model
 
     public function classroom()
     {
-        return $this->hasOne(Classroom::class, 'class_id', 'id');
+        return $this->hasOne(Classroom::class, 'id', 'class_id');
     }
 
-    public function learning()
+    public function learnings()
     {
-        return $this->hasOne(Learning::class, 'topic_id', 'id');
+        return $this->hasMany(Learning::class, 'topic_id', 'id');
     }
 
-    public function quiz()
+    public function quizzes()
     {
         return $this->hasOne(Quiz::class, 'topic_id', 'id');
     }
