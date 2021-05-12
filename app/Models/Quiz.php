@@ -19,7 +19,7 @@ class Quiz extends Model
 
     public function topic()
     {
-        return $this->hasOne(Topic::class, 'topic_id', 'id');
+        return $this->hasOne(Topic::class, 'id', 'topic_id');
     }
 
     public function questions()

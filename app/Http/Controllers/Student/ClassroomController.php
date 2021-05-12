@@ -202,7 +202,7 @@ class ClassroomController extends Controller
     private function get_detail_learning($id, $topic_id)
     {
         $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
-        
+
         return $data;
     }
 
@@ -221,5 +221,60 @@ class ClassroomController extends Controller
         ];
 
         return $data;
+    }
+
+    public function get_classroom_progress($id)
+    {
+        $learnings = $this->get_learnings($id);
+        $quizzes = $this->get_quizzes($id);
+        
+        $trueResultLearnings = count(array_filter($learnings));
+        $falseResultLearnings = count($learnings) - $trueResultLearnings;
+        $trueResultQuizzes = count(array_filter($quizzes));
+        $falseResultQuizzes = count($quizzes) - $trueResultQuizzes;
+
+        $total_complete = $trueResultLearnings + $trueResultQuizzes;
+        $total_uncomplete = $falseResultLearnings + $falseResultQuizzes;
+
+        $total_theory = count($learnings) + count($quizzes);
+        $percentage = 100 * ($total_complete / $total_theory);
+        
+        $data = [
+            'total_theory' => $total_theory,
+            'total_complete' => $total_complete,
+            'total_uncomplete' => $total_uncomplete,
+            'percentage' => $percentage
+        ];
+
+        return ResponseHelper::responseSuccessWithData($data);
+    }
+
+    private function get_learnings($id){
+        $learnings = Learning::with('topic')->whereHas('topic', function($q) use($id){
+            $q->where('class_id', $id);
+        })->get();
+
+        $progress = [];
+        foreach ($learnings as $key => $learning) {
+            $get_progress = $this->check_progress_learning($learning->id, Auth::user()->id);
+            array_push($progress, $get_progress);
+        }
+
+        return $progress;
+    }
+
+    private function get_quizzes($id)
+    {
+        $quizzes = Quiz::with('topic')->whereHas('topic', function($q) use($id){
+            $q->where('class_id', $id);
+        })->get();
+
+        $progress = [];
+        foreach ($quizzes as $key => $quiz) {
+            $get_progress = $this->check_progress_quiz($quiz->id, Auth::user()->id);
+            array_push($progress, $get_progress);
+        }
+
+        return $progress;
     }
 }

@@ -36,6 +36,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'Student\ClassroomController@get_detail_classroom']); // localhost:8000/api/classroom/{id}
             $router->get('/get_topics/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_class_topics']); // localhost:8000/api/classroom/get_topics/{id}
             $router->get('/get_topics/{topic_id}/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_detail_theory']); // localhost:8000/api/classroom/get_topics/{topic_id}/{id}
+            $router->get('/progress/{id}', ['as' => 'class_progress', 'uses' => 'Student\ClassroomController@get_classroom_progress']); // localhost:8000/api/classroom/get_topics/{id}
         });
 
         //profile
