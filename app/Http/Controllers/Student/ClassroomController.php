@@ -183,7 +183,7 @@ class ClassroomController extends Controller
                     $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
                     break;
                 case 'quiz':
-                    $data = Quiz::where('id', $id)->where('topic_id', $topic_id)->first();
+                    $data = $this->get_detail_quiz($id, $topic_id);
                     break;
             }
 
@@ -197,5 +197,22 @@ class ClassroomController extends Controller
         {
             return ResponseHelper::responseError($ex, 404);
         }
+    }
+
+    private function get_detail_quiz($id, $topic_id)
+    {
+        $quiz = Quiz::where('id', $id)->where('topic_id', $topic_id)->first();
+        $quiz_result = QuizResult::where('user_id', Auth::user()->id)->where('quiz_id', $quiz->id)->get();
+
+        $data = [
+            'id' => $quiz->id,
+            'topic_id' => $quiz->topic_id,
+            'name' => $quiz->name,
+            'description' => $quiz->description,
+            'created_at' => $quiz->created_at,
+            'quiz_result' => $quiz_result,
+        ];
+
+        return $data;
     }
 }
