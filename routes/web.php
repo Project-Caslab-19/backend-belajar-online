@@ -45,12 +45,13 @@ $router->group(['prefix' => 'api'], function() use ($router){
         });
         
         //added
-        $router->group(['prefix' => 'admin'], function() use ($router){
+        $router->group(['prefix' => 'teacher'], function() use ($router){
             //dashboard
-            $router->get('/dashboard', ['as' => 'profile', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
+            $router->get('/dashboard', ['as' => 'dashboard', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
             // class list and details (admin version)
             $router->group(['prefix' => 'classroom'], function() use ($router){
-                $router->get('/{id}', ['as' => 'profile', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
+                $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
+                $router->get('/{id}', ['as' => 'detail_class', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
             });
         });
         
