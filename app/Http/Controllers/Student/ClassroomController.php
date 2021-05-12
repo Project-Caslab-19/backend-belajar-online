@@ -180,7 +180,7 @@ class ClassroomController extends Controller
             $topic = Topic::find($topic_id);
             switch ($topic->type) {
                 case 'learning':
-                    $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
+                    $data = $this->get_detail_learning($id, $topic_id);
                     break;
                 case 'quiz':
                     $data = $this->get_detail_quiz($id, $topic_id);
@@ -197,6 +197,13 @@ class ClassroomController extends Controller
         {
             return ResponseHelper::responseError($ex, 404);
         }
+    }
+
+    private function get_detail_learning($id, $topic_id)
+    {
+        $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
+        
+        return $data;
     }
 
     private function get_detail_quiz($id, $topic_id)
