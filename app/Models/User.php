@@ -42,4 +42,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    public function classroom()
+    {
+        return $this->hasMany(ClassMember::class, 'class_id', 'id');
+    }
 }

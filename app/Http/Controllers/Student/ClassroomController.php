@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Student;
 
-use Illuminate\Http\Request;
-use App\Models\Classroom;
-use App\Models\Topic;
-use App\Models\LearningProgress;
-use App\Models\ClassMember;
-use App\Models\QuizResult;
-use App\Models\Learning;
 use App\Models\Quiz;
+use App\Models\Topic;
+use App\Models\Learning;
+use App\Models\Classroom;
+use App\Models\QuizResult;
+use App\Models\ClassMember;
+use Illuminate\Http\Request;
+use App\Helpers\ResponseHelper;
+use App\Models\LearningProgress;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Helpers\ResponseHelper;
-use Illuminate\Auth\Access\Response;
-use App\Http\Controllers\Controller;
 
 class ClassroomController extends Controller
 {
-    public function get_all_classroom(){
+    public function get_all_classroom()
+    {
         try{
             $data = Classroom::with('category')->get();
             return ResponseHelper::responseSuccessWithData($data);
@@ -83,18 +84,18 @@ class ClassroomController extends Controller
     public function get_class_topics($id)
     {
         $topics = Topic::where('class_id', $id)->with('learnings', 'quizzes')->get();
-        $get_status = $this->get_topic_status($topics);
+        $get_status = $this->getTopicStatus($topics);
         
         return ResponseHelper::responseSuccessWithData($get_status);
     }
 
-    private function get_topic_status($topics)
+    private function getTopicStatus($topics)
     {
         $array = [];
         foreach($topics as $key => $val)
         {
             $theories = [];
-            $theories = $this->store_data($val);
+            $theories = $this->storeData($val);
 
             $topic = [
                 'id' => $val['id'],
@@ -108,7 +109,7 @@ class ClassroomController extends Controller
         return $array;
     }
 
-    private function store_data($val)
+    private function storeData($val)
     {
         $theories = [];
         if($val['type'] == 'learning')
@@ -117,7 +118,7 @@ class ClassroomController extends Controller
             {
                 foreach($val['learnings'] as $val2)
                 {
-                    $check_progress = $this->check_progress_learning($val2['id'], Auth::user()->id);
+                    $check_progress = $this->checkProgressLearning($val2['id'], Auth::user()->id);
                     $learning = [
                         'id' => $val2['id'],
                         'name' => $val2['name'],
@@ -135,7 +136,7 @@ class ClassroomController extends Controller
         {  
             if(!empty($val['quizzes']))
             {
-                $check_progress = $this->check_progress_quiz($val['quizzes']['id'], Auth::user()->id);
+                $check_progress = $this->checkProgressQuiz($val['quizzes']['id'], Auth::user()->id);
                 $quiz = [
                     'id' => $val['quizzes']['id'],
                     'name' => $val['quizzes']['name'],
@@ -152,7 +153,7 @@ class ClassroomController extends Controller
         return $theories;
     }
 
-    private function check_progress_learning($learning_id, $user_id)
+    private function checkProgressLearning($learning_id, $user_id)
     {
         try{
             $cek = LearningProgress::where('learning_id', $learning_id)->where('user_id', $user_id)->first();
@@ -164,7 +165,7 @@ class ClassroomController extends Controller
         }
     }
 
-    private function check_progress_quiz($quiz_id, $user_id)
+    private function checkProgressQuiz($quiz_id, $user_id)
     {
         try{
             $cek = QuizResult::where('quiz_id', $quiz_id)->where('user_id', $user_id)->first();
@@ -180,10 +181,10 @@ class ClassroomController extends Controller
             $topic = Topic::find($topic_id);
             switch ($topic->type) {
                 case 'learning':
-                    $data = $this->get_detail_learning($id, $topic_id);
+                    $data = $this->getDetailLearning($id, $topic_id);
                     break;
                 case 'quiz':
-                    $data = $this->get_detail_quiz($id, $topic_id);
+                    $data = $this->getDetailQuiz($id, $topic_id);
                     break;
             }
 
@@ -199,17 +200,17 @@ class ClassroomController extends Controller
         }
     }
 
-    private function get_detail_learning($id, $topic_id)
+    private function getDetailLearning($id, $topic_id)
     {
         $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
 
         return $data;
     }
 
-    private function get_detail_quiz($id, $topic_id)
+    private function getDetailQuiz($id, $topic_id)
     {
         $quiz = Quiz::where('id', $id)->where('topic_id', $topic_id)->first();
-        $quiz_result = QuizResult::where('user_id', Auth::user()->id)->where('quiz_id', $quiz->id)->get();
+        $quiz_results = QuizResult::where('user_id', Auth::user()->id)->where('quiz_id', $quiz->id)->get();
 
         $data = [
             'id' => $quiz->id,
@@ -217,7 +218,7 @@ class ClassroomController extends Controller
             'name' => $quiz->name,
             'description' => $quiz->description,
             'created_at' => $quiz->created_at,
-            'quiz_result' => $quiz_result,
+            'quiz_results' => $quiz_results,
         ];
 
         return $data;
@@ -225,8 +226,8 @@ class ClassroomController extends Controller
 
     public function get_classroom_progress($id)
     {
-        $learnings = $this->get_learnings($id);
-        $quizzes = $this->get_quizzes($id);
+        $learnings = $this->getLearningsProgress($id);
+        $quizzes = $this->getQuizzesProgress($id);
         
         $trueResultLearnings = count(array_filter($learnings));
         $falseResultLearnings = count($learnings) - $trueResultLearnings;
@@ -249,21 +250,22 @@ class ClassroomController extends Controller
         return ResponseHelper::responseSuccessWithData($data);
     }
 
-    private function get_learnings($id){
+    private function getLearningsProgress($id)
+    {
         $learnings = Learning::with('topic')->whereHas('topic', function($q) use($id){
             $q->where('class_id', $id);
         })->get();
 
         $progress = [];
         foreach ($learnings as $key => $learning) {
-            $get_progress = $this->check_progress_learning($learning->id, Auth::user()->id);
+            $get_progress = $this->checkProgressLearning($learning->id, Auth::user()->id);
             array_push($progress, $get_progress);
         }
 
         return $progress;
     }
 
-    private function get_quizzes($id)
+    private function getQuizzesProgress($id)
     {
         $quizzes = Quiz::with('topic')->whereHas('topic', function($q) use($id){
             $q->where('class_id', $id);
@@ -271,10 +273,115 @@ class ClassroomController extends Controller
 
         $progress = [];
         foreach ($quizzes as $key => $quiz) {
-            $get_progress = $this->check_progress_quiz($quiz->id, Auth::user()->id);
+            $get_progress = $this->checkProgressQuiz($quiz->id, Auth::user()->id);
             array_push($progress, $get_progress);
         }
 
         return $progress;
+    }
+
+    public function get_complete_class()
+    {
+        $data = $this->getUserClassroom('complete');
+
+        return ResponseHelper::responseSuccessWithData($data);
+    }
+
+    public function get_uncomplete_class()
+    {
+        $data = $this->getUserClassroom('uncomplete');
+
+        return ResponseHelper::responseSuccessWithData($data);
+    }
+
+    private function getUserClassroom($status = null)
+    {
+        $datas = Classroom::with('members')->whereHas('members', function($q){
+            $q->where('user_id', Auth::user()->id);
+        })->get();
+
+        $data = [];
+        foreach($datas as $val)
+        {
+            $class_id = $val->id;
+            $class_name = $val->name;
+            $class_description = $val->description;
+            $class_created_at = $val->created_at;
+            $class_progress = $this->get_classroom_progress($class_id)->original['data'];
+            $class_progress_percentage = $this->get_classroom_progress($class_id)->original['data']['percentage'];
+
+            $arr = [
+                'id' => $class_id,
+                'name' => $class_name,
+                'description' => $class_description,
+                'created_at' => $class_created_at,
+                'progress' => $class_progress,
+            ];
+
+            if($status == 'complete')
+            {
+                if($class_progress_percentage === 100)
+                {
+                    array_push($data, $arr);
+                }
+            }
+            elseif($status == 'uncomplete')
+            {
+                if($class_progress_percentage < 100)
+                {
+                    array_push($data, $arr);
+                }
+            }
+            else
+            {
+                array_push($data, $arr);
+            }
+        }
+
+        return $data;
+    }
+
+    public function get_classroom_quiz()
+    {
+        $user_id = Auth::user()->id;
+        $quizzes = Quiz::with('topic', 'topic.classroom', 'topic.classroom.members' ,'quiz_results')->whereHas('topic.classroom.members', function($q) use($user_id){
+            $q->where('user_id', $user_id);
+        })->whereHas('quiz_results', function($q) use($user_id){
+            $q->where('user_id', $user_id);
+        })->get();
+
+        $data = [];
+        foreach($quizzes as $val)
+        {
+            $highestQuizResult = $this->getHighestQuizResult($val['quiz_results']);
+            
+            $arr = [
+                'id' => $val['id'],
+                'name' => $val['name'],
+                'description' => $val['description'],
+                'topic' => $val['topic']['name'],
+                'classroom' => $val['topic']['classroom']['name'],
+                'quiz_results' => $highestQuizResult,
+            ];
+
+            array_push($data, $arr);
+        }
+
+        return $data;
+    }
+
+    private function getHighestQuizResult($quiz_results)
+    {
+        $highest_index = 0;
+        $highest_value = 0;
+        foreach ($quiz_results as $key => $val) {
+            if($val['value'] > $highest_value)
+            {
+                $highest_value = $val['value'];
+                $highest_index = $key;
+            }
+        }
+
+        return $quiz_results[$highest_index];
     }
 }
