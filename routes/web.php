@@ -32,7 +32,6 @@ $router->group(['prefix' => 'api'], function() use ($router){
         //category
         $router->group(['prefix' => 'classroom'], function() use ($router) {
             $router->post('/enroll', ['as' => 'enroll', 'uses' => 'Student\ClassroomController@enroll_classroom']); // localhost:8000/api/classroom/enroll
-
             $router->get('/', ['as' => 'classroom', 'uses' => 'Student\ClassroomController@get_all_classroom']); // localhost:8000/api/classroom/
             $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'Student\ClassroomController@get_detail_classroom']); // localhost:8000/api/classroom/{id}
         });
@@ -44,6 +43,17 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'Student\ProfileController@update_profile']); // localhost:8000/api/profile/update_profile/{id}
             $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'Student\ProfileController@update_account']); // localhost:8000/api/profile/update_account/{id}
         });
+        
+        //added
+        $router->group(['prefix' => 'admin'], function() use ($router){
+            //dashboard
+            $router->get('/dashboard', ['as' => 'profile', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
+            // class list and details (admin version)
+            $router->group(['prefix' => 'classroom'], function() use ($router){
+                $router->get('/{id}', ['as' => 'profile', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
+            });
+        });
+        
 
         $router->get('/controller', 'Controller@index');
     });
