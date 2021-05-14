@@ -157,12 +157,12 @@ class ClassroomController extends Controller
     {
         try{
             $cek = LearningProgress::where('learning_id', $learning_id)->where('user_id', $user_id)->first();
-    
-            return (empty($cek)) ? false : true;
         }catch(\Exception $ex)
         {
             return false;
         }
+
+        return (empty($cek)) ? false : true;
     }
 
     private function checkProgressQuiz($quiz_id, $user_id)
@@ -367,7 +367,7 @@ class ClassroomController extends Controller
             array_push($data, $arr);
         }
 
-        return $data;
+        return ResponseHelper::responseSuccessWithData($data);
     }
 
     private function getHighestQuizResult($quiz_results)
