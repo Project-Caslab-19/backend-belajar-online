@@ -48,6 +48,18 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->patch('/update_profile/{id}', ['as' => 'update_profile', 'uses' => 'Student\ProfileController@update_profile']); // localhost:8000/api/profile/update_profile/{id}
             $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'Student\ProfileController@update_account']); // localhost:8000/api/profile/update_account/{id}
         });
+        
+        //added
+        $router->group(['prefix' => 'teacher'], function() use ($router){
+            //dashboard
+            $router->get('/dashboard', ['as' => 'dashboard', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
+            // class list and details (admin version)
+            $router->group(['prefix' => 'classroom'], function() use ($router){
+                $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
+                $router->get('/{id}', ['as' => 'detail_class', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
+            });
+        });
+        
 
         $router->group(['prefix' => 'quiz'], function() use ($router) {
             $router->get('/get_questions/{id_quiz}', ['as' => 'get_questions', 'uses' => 'Student\QuizController@get_questions']); 
