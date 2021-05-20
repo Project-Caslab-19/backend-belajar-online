@@ -9,6 +9,7 @@ class QuizResult extends Model
 {
     use SoftDeletes;
     
+    protected $table = 'quiz_results';
     protected $guarded = [];
 
     public function quiz()

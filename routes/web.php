@@ -31,9 +31,14 @@ $router->group(['prefix' => 'api'], function() use ($router){
 
         //category
         $router->group(['prefix' => 'classroom'], function() use ($router) {
+            $router->get('/quiz', ['as' => 'class_quiz', 'uses' => 'Student\ClassroomController@get_classroom_quiz']); // localhost:8000/api/classroom/quiz
+            $router->get('/uncomplete', ['as' => 'class_uncomplete', 'uses' => 'Student\ClassroomController@get_uncomplete_class']); // localhost:8000/api/classroom/uncomplete
+            $router->get('/complete', ['as' => 'class_complete', 'uses' => 'Student\ClassroomController@get_complete_class']); // localhost:8000/api/classroom/uncomplete
+            $router->get('/get_topics/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_class_topics']); // localhost:8000/api/classroom/get_topics/{id}
+            $router->get('/progress/{id}', ['as' => 'class_progress', 'uses' => 'Student\ClassroomController@get_classroom_progress']); // localhost:8000/api/classroom/get_topics/{id}
+            $router->get('/get_topics/{topic_id}/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_detail_theory']); // localhost:8000/api/classroom/get_topics/{topic_id}/{id}
+
             $router->post('/enroll', ['as' => 'enroll', 'uses' => 'Student\ClassroomController@enroll_classroom']); // localhost:8000/api/classroom/enroll
-            $router->get('/', ['as' => 'classroom', 'uses' => 'Student\ClassroomController@get_all_classroom']); // localhost:8000/api/classroom/
-            $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'Student\ClassroomController@get_detail_classroom']); // localhost:8000/api/classroom/{id}
         });
 
         //profile
@@ -56,6 +61,16 @@ $router->group(['prefix' => 'api'], function() use ($router){
         });
         
 
+        $router->group(['prefix' => 'quiz'], function() use ($router) {
+            $router->get('/get_questions/{id_quiz}', ['as' => 'get_questions', 'uses' => 'Student\QuizController@get_questions']); 
+            $router->post('/send_answer', ['as' => 'send_answer', 'uses' => 'Student\QuizController@send_answer']);
+        });
+
         $router->get('/controller', 'Controller@index');
+    });
+
+    $router->group(['prefix' => 'classroom'], function() use($router){
+        $router->get('/', ['as' => 'classroom', 'uses' => 'Student\ClassroomController@get_all_classroom']); // localhost:8000/api/classroom/
+        $router->get('/{id}', ['as' => 'detail_classroom', 'uses' => 'Student\ClassroomController@get_detail_classroom']); // localhost:8000/api/classroom/{id}
     });
 });

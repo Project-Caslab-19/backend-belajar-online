@@ -9,6 +9,7 @@ class Quiz extends Model
 {
     use SoftDeletes;
     
+    protected $table = 'quiz';
     protected $guarded = [];
     
     public function answers()
@@ -18,7 +19,7 @@ class Quiz extends Model
 
     public function topic()
     {
-        return $this->hasOne(Topic::class, 'topic_id', 'id');
+        return $this->hasOne(Topic::class, 'id', 'topic_id');
     }
 
     public function questions()
@@ -26,8 +27,8 @@ class Quiz extends Model
         return $this->hasMany(Question::class, 'quiz_id', 'id');
     }
 
-    public function quiz_result()
+    public function quiz_results()
     {
-        return $this->hasOne(QuizResult::class, 'quiz_id', 'id');
+        return $this->hasMany(QuizResult::class, 'quiz_id', 'id');
     }
 }
