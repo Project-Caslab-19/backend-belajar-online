@@ -53,6 +53,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
         $router->group(['prefix' => 'teacher'], function() use ($router){
             //dashboard
             $router->get('/dashboard', ['as' => 'dashboard', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
+            
             // class list and details (admin version)
             $router->group(['prefix' => 'classroom'], function() use ($router){
                 $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
