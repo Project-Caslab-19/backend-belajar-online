@@ -86,7 +86,7 @@ class ClassroomController extends Controller
             return ResponseHelper::responseSuccess('Success create a classroom');
         }catch(Exception $ex)
         {
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
     }
 

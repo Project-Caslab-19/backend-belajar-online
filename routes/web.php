@@ -67,11 +67,19 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->group(['prefix' => 'classroom'], function() use ($router){
                 $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
                 $router->get('/{id}', ['as' => 'detail_class', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
+                $router->get('topics/{class_id}', ['as' => 'get_all_topic', 'uses' => 'Teacher\TopicController@get_class_topic']);
                 $router->patch('/{id}', ['as' => 'edit_class', 'uses' => 'Teacher\ClassroomController@edit_classroom']);
                 $router->post('/', ['as' => 'create_class', 'uses' => 'Teacher\ClassroomController@create_classroom']);
                 $router->delete('/{id}', ['as' => 'delete_class', 'uses' => 'Teacher\ClassroomController@delete_classroom']);
             });
 
+            $router->group(['prefix' => 'topic'], function() use($router){
+                $router->get('/', ['as' => 'get_all_topic', 'uses' => 'Teacher\TopicController@get_all']);
+                $router->get('/{id}', ['as' => 'get_detail_topic', 'uses' => 'Teacher\TopicController@get_detail']);
+                $router->post('/', ['as' => 'create_topic', 'uses' => 'Teacher\TopicController@create_topic']);
+                $router->patch('/{id}', ['as' => 'edit_topic', 'uses' => 'Teacher\TopicController@edit_topic']);
+                $router->delete('/{id}', ['as' => 'edit_topic', 'uses' => 'Teacher\TopicController@delete_topic']);
+            });
         });
     });
 
