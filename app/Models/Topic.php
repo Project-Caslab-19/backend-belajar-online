@@ -23,6 +23,6 @@ class Topic extends Model
 
     public function quizzes()
     {
-        return $this->hasOne(Quiz::class, 'topic_id', 'id');
+        return $this->hasMany(Quiz::class, 'topic_id', 'id');
     }
 }

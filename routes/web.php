@@ -21,13 +21,13 @@ $router->group(['prefix' => 'api'], function() use ($router){
     $router->post('register', ['as' => 'register', 'uses' => 'AuthController@register']); //localhost:8000/api/register
     $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']); //localhost:8000/api/logout
 
+    //category
+    $router->group(['prefix' => 'category'], function() use ($router) {
+        $router->get('/', ['as' => 'category', 'uses' => 'Student\CategoryController@get_all_categories']); // localhost:8000/api/category
+        $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'Student\CategoryController@get_detail_category']); // localhost:8000/api/category/{id}
+    });
+
     $router->group(['middleware' => 'auth'], function() use ($router) {
-        
-        //category
-        $router->group(['prefix' => 'category'], function() use ($router) {
-            $router->get('/', ['as' => 'category', 'uses' => 'Student\CategoryController@get_all_categories']); // localhost:8000/api/category
-            $router->get('/{id}', ['as' => 'detail_category', 'uses' => 'Student\CategoryController@get_detail_category']); // localhost:8000/api/category/{id}
-        });
 
         //category
         $router->group(['prefix' => 'classroom'], function() use ($router) {
@@ -49,18 +49,6 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->patch('/update_account/{id}', ['as' => 'update_account', 'uses' => 'Student\ProfileController@update_account']); // localhost:8000/api/profile/update_account/{id}
         });
         
-        //added
-        $router->group(['prefix' => 'teacher'], function() use ($router){
-            //dashboard
-            $router->get('/dashboard', ['as' => 'dashboard', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/admin/dashboard
-            
-            // class list and details (admin version)
-            $router->group(['prefix' => 'classroom'], function() use ($router){
-                $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
-                $router->get('/{id}', ['as' => 'detail_class', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
-            });
-        });
-        
 
         $router->group(['prefix' => 'quiz'], function() use ($router) {
             $router->get('/get_questions/{id_quiz}', ['as' => 'get_questions', 'uses' => 'Student\QuizController@get_questions']); 
@@ -68,6 +56,23 @@ $router->group(['prefix' => 'api'], function() use ($router){
         });
 
         $router->get('/controller', 'Controller@index');
+
+        //added
+        $router->group(['prefix' => 'teacher'], function() use ($router){
+            //dashboard
+            $router->get('/dashboard', ['as' => 'dashboard', 'uses' => 'Teacher\DashboardController@get_dashboard_content']); // localhost:8000/api/teacher/dashboard
+            $router->get('/categories', ['as' => 'categories', 'uses' => 'Teacher\CategoryController@get_category']); // localhost:8000/api/teacher/categories
+            
+            // class list and details (teacher version)
+            $router->group(['prefix' => 'classroom'], function() use ($router){
+                $router->get('/', ['as' => 'list_class', 'uses' => 'Teacher\ClassroomController@get_classroom']); // localhost:8000/api/profile
+                $router->get('/{id}', ['as' => 'detail_class', 'uses' => 'Teacher\ClassroomController@get_detail_class']); // localhost:8000/api/profile
+                $router->patch('/{id}', ['as' => 'edit_class', 'uses' => 'Teacher\ClassroomController@edit_classroom']);
+                $router->post('/', ['as' => 'create_class', 'uses' => 'Teacher\ClassroomController@create_classroom']);
+                $router->delete('/{id}', ['as' => 'delete_class', 'uses' => 'Teacher\ClassroomController@delete_classroom']);
+            });
+
+        });
     });
 
     $router->group(['prefix' => 'classroom'], function() use($router){

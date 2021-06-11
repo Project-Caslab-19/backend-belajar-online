@@ -15,7 +15,7 @@ class CategoryController extends Controller
             $data = Category::all();
             return ResponseHelper::responseSuccessWithData($data);
         }catch(\Exception $ex){
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
     }
 

@@ -24,7 +24,7 @@ class ClassroomController extends Controller
             $data = Classroom::with('category')->get();
             return ResponseHelper::responseSuccessWithData($data);
         }catch(\Exception $ex){
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
     }   
 
@@ -77,7 +77,7 @@ class ClassroomController extends Controller
                 
             return ResponseHelper::responseSuccess('Congratulations you have successfully enrolled in this class!');
         }catch(\Exception $ex){
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
     }
 
@@ -136,17 +136,20 @@ class ClassroomController extends Controller
         {  
             if(!empty($val['quizzes']))
             {
-                $check_progress = $this->checkProgressQuiz($val['quizzes']['id'], Auth::user()->id);
-                $quiz = [
-                    'id' => $val['quizzes']['id'],
-                    'name' => $val['quizzes']['name'],
-                    'description' => $val['quizzes']['description'],
-                    'is_open' => $check_progress,
-                    'type' => $val['type'],
-                    'created_at' => $val['quizzes']['created_at'],
-                ];
-    
-                array_push($theories, $quiz);
+                foreach($val['quizzes'] as $val2)
+                {
+                    $check_progress = $this->checkProgressQuiz($val2['id'], Auth::user()->id);
+                    $quiz = [
+                        'id' => $val2['id'],
+                        'name' => $val2['name'],
+                        'description' => $val2['description'],
+                        'is_open' => $check_progress,
+                        'type' => $val['type'],
+                        'created_at' => $val2['created_at'],
+                    ];
+        
+                    array_push($theories, $quiz);
+                }
             }
         }
 
@@ -196,13 +199,18 @@ class ClassroomController extends Controller
             return ResponseHelper::responseSuccessWithData($data);
         }catch(\Exception $ex)
         {
-            return ResponseHelper::responseError($ex, 404);
+            return ResponseHelper::responseError($ex->getMessage(), 404);
         }
     }
 
     private function getDetailLearning($id, $topic_id)
     {
         $data = Learning::where('id', $id)->where('topic_id', $topic_id)->first();
+        LearningProgress::create([
+            'topic_id' => $topic_id,
+            'user_id' => Auth::user()->id,
+            'duration' => '00'
+        ]);
 
         return $data;
     }

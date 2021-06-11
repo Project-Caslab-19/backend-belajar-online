@@ -1,0 +1,45 @@
+[33meb1e0a6[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m update response dashboard teacher endpoint
+[33ma076387[m update response dashboard teacher endpoint
+[33me514ed9[m Merge branch 'main' of https://github.com/Project-Caslab-19/backend-belajar-online into main
+[33mbaa28c3[m Update README.md
+[33mb51e58e[m Merge pull request #1 from Project-Caslab-19/admin
+[33md440e07[m[33m ([m[1;31morigin/admin[m[33m, [m[1;32madmin[m[33m)[m Merge branch 'main' into admin
+[33ma251f6c[m update migration & seeder
+[33m00277df[m get question & send answer quiz
+[33m863f3da[m get classroom user & get quiz result user
+[33m9aaf6f1[m sedikit revisi di routing
+[33m73f4c86[m nambah dashboard, daftar kelas, dan detail kelas versi admin/teacher
+[33maa1deb4[m get progress classroom
+[33mc2fc396[m change endpoint detail theory
+[33ma097b14[m get detail quiz
+[33m41f3dcb[m get detail topic class & detail theory
+[33ma661b5b[m fix path
+[33m7a48428[m update account
+[33m90416b8[m update profile and get profile image
+[33m582c04a[m progress video
+[33m1c517f8[m action enroll class
+[33mc07218d[m fix classroom  response
+[33md209f06[m Get Class & Detail Class
+[33m93eec2b[m get category & detail category
+[33m22f54e4[m add seeders
+[33m77e01d9[m Models and fix migrations
+[33md614ee8[m API Register User
+[33m7301114[m add migrations(2)
+[33mfdff34a[m Merge branch 'main' of https://github.com/Project-Caslab-19/backend-belajar-online into main
+[33m1a0b9bf[m auth with username or email
+[33mbf87551[m Update README.md
+[33m33ee382[m Merge branch 'main' of https://github.com/Project-Caslab-19/backend-belajar-online into main
+[33m54b10f4[m Create Authentication JWT API
+[33m83f4cac[m Update README.md
+[33mbbe1833[m Merge branch 'main' of https://github.com/Project-Caslab-19/backend-belajar-online into main
+[33m82123d2[m Update README.md
+[33m9775cc1[m add dependencies jwt auth
+[33m40d07f1[m user table migrations
+[33me30c026[m Create Migrations Table @akhmadkhasan68
+[33m017ddee[m env example
+[33mb13bcb5[m Merge branch 'main' of https://github.com/Project-Caslab-19/backend-belajar-online into main
+[33m6af2693[m sampel controller and route
+[33m8253b02[m Update README.md
+[33m67b8e0d[m Update README.md
+[33m2c9170e[m add depedencies lumen generator
+[33m1932f33[m init project

@@ -22,7 +22,7 @@ class ProfileController extends Controller
             $user = User::where('id', $id)->firstOrFail();
         }catch(\Exception $ex)
         {
-            return ResponseHelper::responseError($ex, 404);
+            return ResponseHelper::responseError($ex->getMessage(), 404);
         }
         
         $path = storage_path('uploads/students/photos/') . $user->photo;
@@ -91,7 +91,7 @@ class ProfileController extends Controller
                 $update_img->photo = $imageName;
                 $update_img->save();
             }catch(\Exception $ex){
-                return ResponseHelper::responseError($ex, 500);
+                return ResponseHelper::responseError($ex->getMessage(), 500);
             }
         }
         
@@ -104,7 +104,7 @@ class ProfileController extends Controller
             
             return ResponseHelper::responseSuccess('Congratulations! you have successfully changed your profile.');
         }catch(\Exception $ex){
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
     }
 
@@ -157,7 +157,7 @@ class ProfileController extends Controller
 
                 return ResponseHelper::responseSuccess('Congratulations! your email has been successfully changed.');
             }catch(\Exception $ex){
-                return ResponseHelper::responseError($ex, 500);
+                return ResponseHelper::responseError($ex->getMessage(), 500);
             }
 
         }
@@ -194,7 +194,7 @@ class ProfileController extends Controller
 
                 return ResponseHelper::responseSuccess('Congratulations! your password has been successfully changed.');
             }catch(\Exception $ex){
-                return ResponseHelper::responseError($ex, 500);
+                return ResponseHelper::responseError($ex->getMessage(), 500);
             }
 
         }

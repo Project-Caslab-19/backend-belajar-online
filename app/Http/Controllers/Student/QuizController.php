@@ -16,13 +16,13 @@ class QuizController extends Controller
     public function get_questions($id_quiz)
     {
         try{
-            $data = Question::select(['id', 'quiz_id', 'value', 'key_answer'])->with('answers')->with('quiz_answer', function($q) use($id_quiz)
+            $data = Question::select(['id', 'quiz_id', 'value'])->with('answers')->with('quiz_answer', function($q) use($id_quiz)
             {
                 $q->where('user_id', Auth::user()->id);
             })->where('quiz_id', $id_quiz)->get();
         }catch(\Exception $ex)
         {   
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
 
         return ResponseHelper::responseSuccessWithData($data);
@@ -57,7 +57,7 @@ class QuizController extends Controller
             }
         }catch(\Exception $ex)
         {  
-            return ResponseHelper::responseError($ex, 500);
+            return ResponseHelper::responseError($ex->getMessage(), 500);
         }
 
         return ResponseHelper::responseSuccess('Success to send answer!');
