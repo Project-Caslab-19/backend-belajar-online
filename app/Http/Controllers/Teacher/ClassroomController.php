@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Helpers\ResponseHelper;
 use App\Models\ClassMember;
 use App\Models\Learning;
@@ -11,7 +14,6 @@ use App\Models\Quiz;
 use App\Models\Topic;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
