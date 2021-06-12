@@ -37,6 +37,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
             $router->get('/get_topics/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_class_topics']); // localhost:8000/api/classroom/get_topics/{id}
             $router->get('/progress/{id}', ['as' => 'class_progress', 'uses' => 'Student\ClassroomController@get_classroom_progress']); // localhost:8000/api/classroom/get_topics/{id}
             $router->get('/get_topics/{topic_id}/{id}', ['as' => 'class_topics', 'uses' => 'Student\ClassroomController@get_detail_theory']); // localhost:8000/api/classroom/get_topics/{topic_id}/{id}
+            $router->get('/get_video/{learning_id}', ['as' => 'get_video', 'uses' => 'Student\ClassroomController@get_video']); // localhost:8000/api/classroom/get_topics/{topic_id}/{id}
 
             $router->post('/enroll', ['as' => 'enroll', 'uses' => 'Student\ClassroomController@enroll_classroom']); // localhost:8000/api/classroom/enroll
         });
@@ -79,6 +80,13 @@ $router->group(['prefix' => 'api'], function() use ($router){
                 $router->post('/', ['as' => 'create_topic', 'uses' => 'Teacher\TopicController@create_topic']);
                 $router->patch('/{id}', ['as' => 'edit_topic', 'uses' => 'Teacher\TopicController@edit_topic']);
                 $router->delete('/{id}', ['as' => 'edit_topic', 'uses' => 'Teacher\TopicController@delete_topic']);
+            });
+
+            $router->group(['prefix' => 'learning'], function() use($router){
+                $router->post('/', ['as' => 'create_learning', 'uses' => 'Teacher\LearningController@create']);
+                $router->get('/{id}', ['as' => 'get_learning_detail', 'uses' => 'Teacher\LearningController@detail']);
+                $router->patch('/{id}', ['as' => 'edit_learning', 'uses' => 'Teacher\LearningController@edit']);
+                $router->delete('/{id}', ['as' => 'delete_learning', 'uses' => 'Teacher\LearningController@delete']);
             });
         });
     });

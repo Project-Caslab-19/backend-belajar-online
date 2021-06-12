@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Models\LearningProgress;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -176,6 +177,16 @@ class ClassroomController extends Controller
         }catch(\Exception $ex){
             return false;
         }
+    }
+
+    public function get_video($learning_id)
+    {
+        $data = Learning::find($learning_id);
+
+        $file = File::get($data->video);
+        $type = File::mimeType($data->video);
+
+        return (new Response($file, 200))->header('Content-Type', $type);
     }
 
     public function get_detail_theory($topic_id, $id)
